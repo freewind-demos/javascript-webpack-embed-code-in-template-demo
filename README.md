@@ -1,12 +1,17 @@
-JavaScript Webpack "html-webpack-plugin" with Custom Template Demo
-==================================================================
+JavaScript Webpack Embed Code in Template Demo
+==============================================
 
-在使用"html-webpack-plugin"的时候如何指定以某个文件作为template。
+如何把webpack生成的script以非常精准的方式插入到html中的某个位置？
 
-需要注意的是`inject`，如果为`true`，则会在生成的html最后再inject一个`bundle.js`。
-在我们的这个例子中，因为template中已经有了`bundle.js`，所以要把`inject`设为`false`。
+通过一个自定义的webpack插件`webpack-base64-generated-script-plugin.js`，
+我们可以在`HtmlWebpackPlugin`插件生成了HTML文件但是还没有输出的时候，修改它的内容。
 
-另外，`template.html`的内容基本上来自html-webpack-plugin的默认模板：<https://github.com/jaketrent/html-webpack-template/blob/86f285d5c790a6c15263f5cc50fd666d51f974fd/index.html>
+为了让生成的script不会因为引号或者其它符号问题导致插入后有语法错误，所以我们需要先对它进行base64转码，
+插入到html后，再用`atob`对它进行解码，再使用`eval`执行即可。
+
+注意，自定义的插件依赖于`HtmlWebpackPlugin`，所以要放在其后面。
+
+同时需要注意在`HtmlWebpackPlugin`中，`inject`必须为`false`。如果为`true`，则会在生成的html最后再inject一个`bundle.js`。
 
 ```
 npm install
